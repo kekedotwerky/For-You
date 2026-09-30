@@ -1,208 +1,1901 @@
 <!DOCTYPE html>
-<html lang="id">
+
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You, My Everything</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css">
+    <title>L.O.V.E</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+    /* =========================================================
+       OPENING CARD → SMOOTH FULL SCREEN CUTE BURST
+       ========================================================= */
+
+    #cute-burst {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 999999;
+        pointer-events: none;
+        overflow: hidden;
+        display: none;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+
+    #cute-burst.active {
+        display: block;
+    }
+
+    #cute-burst::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(35, 5, 20, 0.94);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        z-index: -1;
+    }
+
+    #cute-burst.active::after {
+        opacity: 1;
+    }
+
+    .burst-item {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform:
+            translate3d(-50%, -50%, 0)
+            scale(0.1);
+
+        opacity: 0;
+        pointer-events: none;
+        user-select: none;
+        white-space: nowrap;
+
+        will-change:
+            transform,
+            opacity;
+
+        animation:
+            smoothBurst
+            var(--duration)
+            cubic-bezier(0.2, 0.8, 0.25, 1)
+            var(--delay)
+            forwards;
+    }
+
+    @keyframes smoothBurst {
+
+        0% {
+            opacity: 0;
+
+            transform:
+                translate3d(-50%, -50%, 0)
+                scale(0.1)
+                rotate(0deg);
+        }
+
+        12% {
+            opacity: 1;
+
+            transform:
+                translate3d(-50%, -50%, 0)
+                scale(1.1)
+                rotate(var(--rotation));
+        }
+
+        45% {
+            opacity: 1;
+
+            transform:
+                translate3d(
+                    calc(-50% + var(--x1)),
+                    calc(-50% + var(--y1)),
+                    0
+                )
+                scale(0.9)
+                rotate(var(--rotation));
+        }
+
+        100% {
+            opacity: 1;
+
+            transform:
+                translate3d(
+                    calc(-50% + var(--x2)),
+                    calc(-50% + var(--y2)),
+                    0
+                )
+                scale(var(--scale))
+                rotate(var(--rotation));
+        }
+    }
+
+    /* =========================================================
+       CARD CLICK EFFECT
+       ========================================================= */
+
+    #cover-screen.card-clicked .gift-box {
+        animation:
+            cardBurst
+            0.45s
+            ease-in
+            forwards;
+    }
+
+    @keyframes cardBurst {
+
+        0% {
+            transform: scale(1);
+        }
+
+        30% {
+            transform: scale(1.18);
+        }
+
+        60% {
+            transform: scale(0.85);
+        }
+
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+
+    /* =========================================================
+       COVER SCREEN FADE
+       ========================================================= */
+
+    #cover-screen.card-clicked {
+        animation:
+            coverFade
+            0.65s
+            ease
+            forwards;
+    }
+
+    @keyframes coverFade {
+
+        0% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    /* =========================================================
+       FIRST SCENE REVEAL
+       ========================================================= */
+
+    #main-content.first-reveal {
+        animation:
+            firstSceneReveal
+            0.7s
+            ease
+            forwards;
+    }
+
+    @keyframes firstSceneReveal {
+
+        0% {
+            opacity: 0;
+
+            transform:
+                scale(1.02);
+        }
+
+        100% {
+            opacity: 1;
+
+            transform:
+                scale(1);
+        }
+    }
+
+
+    /* =========================================================
+SMALL FIXED SIDE MUSIC PLAYER
+========================================================= */
+
+#music-player {
+position: fixed;
+right: 15px;
+bottom: 15px;
+width: 205px;
+
+
+background: rgba(35, 5, 20, 0.90);
+
+border: 1px solid rgba(255, 255, 255, 0.10);
+border-radius: 13px;
+
+padding: 9px;
+
+box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.30),
+    0 0 15px rgba(229, 115, 115, 0.10);
+
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+
+z-index: 9998;
+
+color: #fff;
+
+
+}
+
+.music-player-top {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+#player-cover {
+width: 42px;
+height: 42px;
+
+object-fit: cover;
+border-radius: 7px;
+
+flex-shrink: 0;
+
+
+}
+
+.music-info {
+min-width: 0;
+flex: 1;
+}
+
+#player-title {
+margin: 0;
+
+font-family: 'Montserrat', sans-serif;
+
+font-size: 11px;
+font-weight: 500;
+
+color: #fff;
+
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+
+
+}
+
+#player-artist {
+margin: 3px 0 0;
+
+font-family: 'Montserrat', sans-serif;
+
+font-size: 8px;
+
+color: rgba(255, 255, 255, 0.50);
+
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+
+
+}
+
+.music-progress {
+margin-top: 7px;
+}
+
+#seek-bar {
+width: 100%;
+height: 3px;
+
+
+appearance: none;
+-webkit-appearance: none;
+
+background: rgba(255, 255, 255, 0.18);
+
+border-radius: 10px;
+
+outline: none;
+
+cursor: pointer;
+
+
+}
+
+#seek-bar::-webkit-slider-thumb {
+appearance: none;
+-webkit-appearance: none;
+
+
+width: 8px;
+height: 8px;
+
+border-radius: 50%;
+
+background: #fff;
+
+cursor: pointer;
+
+
+}
+
+#seek-bar::-moz-range-thumb {
+width: 8px;
+height: 8px;
+
+
+border: none;
+border-radius: 50%;
+
+background: #fff;
+
+cursor: pointer;
+
+
+}
+
+.music-time {
+display: flex;
+justify-content: space-between;
+
+
+margin-top: 3px;
+
+font-family: 'Montserrat', sans-serif;
+
+font-size: 7px;
+
+color: rgba(255, 255, 255, 0.40);
+
+
+}
+
+.music-controls {
+display: flex;
+
+
+justify-content: center;
+align-items: center;
+
+gap: 9px;
+
+margin-top: 6px;
+
+
+}
+
+.music-control-btn {
+width: 25px;
+height: 25px;
+
+
+border: none;
+border-radius: 50%;
+
+background: rgba(255, 255, 255, 0.07);
+
+color: #fff;
+
+font-size: 9px;
+
+cursor: pointer;
+
+display: flex;
+
+justify-content: center;
+align-items: center;
+
+transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+
+
+}
+
+.music-control-btn:hover {
+background: rgba(255, 255, 255, 0.15);
+transform: scale(1.06);
+}
+
+#play-pause-btn {
+width: 30px;
+height: 30px;
+
+
+font-size: 11px;
+
+background: rgba(255, 255, 255, 0.13);
+
+
+}
+
+#play-pause-btn:hover {
+background: rgba(255, 255, 255, 0.20);
+}
+
+.music-label {
+text-align: center;
+
+
+margin-top: 5px;
+
+font-family: 'Montserrat', sans-serif;
+
+font-size: 6px;
+
+letter-spacing: 1.5px;
+
+text-transform: uppercase;
+
+color: rgba(255, 255, 255, 0.30);
+
+
+}
+
+/* =========================================================
+MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+
+#music-player {
+    right: 8px;
+    left: auto;
+    bottom: 8px;
+
+    width: 175px;
+
+    padding: 8px;
+
+    border-radius: 11px;
+}
+
+#player-cover {
+    width: 36px;
+    height: 36px;
+}
+
+#player-title {
+    font-size: 9px;
+}
+
+#player-artist {
+    font-size: 7px;
+}
+
+.music-controls {
+    gap: 7px;
+}
+
+.music-control-btn {
+    width: 23px;
+    height: 23px;
+    font-size: 8px;
+}
+
+#play-pause-btn {
+    width: 27px;
+    height: 27px;
+    font-size: 10px;
+}
+
+}
+
+    /* =========================================================
+       MOBILE MUSIC PLAYER
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+        #music-player {
+            right: 10px;
+            left: 10px;
+            bottom: 10px;
+
+            width: auto;
+
+            padding: 11px;
+
+            border-radius: 16px;
+        }
+
+        #player-cover {
+            width: 50px;
+            height: 50px;
+        }
+
+        #player-title {
+            font-size: 13px;
+        }
+
+        #player-artist {
+            font-size: 10px;
+        }
+
+        .music-controls {
+            gap: 12px;
+        }
+    }
+
+</style>
+
+
 </head>
+
 <body>
 
-    <audio id="bg-music">
-        <source src="assets/lagu/lagu.mp3" type="audio/mpeg">
-    </audio>
 
-    <div class="petals" id="petals-container"></div>
+<!-- =========================================================
+     BACKGROUND MUSIC
+     ========================================================= -->
 
-    <div id="cover-screen" onclick="showPopup()">
-        <div class="gift-box" id="gift-icon">🤍</div>
-        <div class="tap-text" id="tap-text">surprise untuk kesayangan aku🤍</div>
-    </div>
+<audio id="bg-music" preload="auto">
+    <source src="assets/lagu/lagu1.mp3" type="audio/mpeg">
+</audio>
 
-    <div id="popup-overlay" class="hidden">
-    <div id="popup-box">
-        <h3 class="serif">Bener bener mau buka surprisenya nihh 🥺</h3>
-        <div class="popup-buttons">
-            <button id="btn-yes" class="popup-btn" onclick="confirmOpenGift()">Iyaaa dongggg 🤍</button>
-            <button id="btn-no" class="popup-btn">Nggak ah skip dulu 😜</button>
+
+<!-- =========================================================
+     SIDE MUSIC PLAYER
+     ========================================================= -->
+
+<div id="music-player">
+
+    <div class="music-player-top">
+
+        <img
+            id="player-cover"
+            src="assets/cover/cover1.jpg"
+            alt="Current song cover"
+        >
+
+        <div class="music-info">
+
+            <p id="player-title">
+                You Got It All Over
+            </p>
+
+            <p id="player-artist">
+                MYMP
+            </p>
+
         </div>
+
     </div>
+
+
+    <div class="music-progress">
+
+        <input
+            type="range"
+            id="seek-bar"
+            min="0"
+            max="100"
+            value="0"
+        >
+
+        <div class="music-time">
+
+            <span id="current-time">
+                0:00
+            </span>
+
+            <span id="duration">
+                0:00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="music-controls">
+
+        <button
+            class="music-control-btn"
+            onclick="prevSong()"
+            aria-label="Previous song"
+        >
+            ⏮
+        </button>
+
+
+        <button
+            class="music-control-btn"
+            id="play-pause-btn"
+            onclick="toggleMusic()"
+            aria-label="Play or pause music"
+        >
+            ▶
+        </button>
+
+
+        <button
+            class="music-control-btn"
+            onclick="nextSong()"
+            aria-label="Next song"
+        >
+            ⏭
+        </button>
+
+    </div>
+
+
+    <div class="music-label">
+        now playing ♡
+    </div>
+
 </div>
 
-    <div id="main-content">
+
+<!-- =========================================================
+     BACKGROUND PETALS
+     ========================================================= -->
+
+<div
+    class="petals"
+    id="petals-container"
+></div>
+
+
+<!-- =========================================================
+     OPENING CARD
+     ========================================================= -->
+
+<div
+    id="cover-screen"
+    onclick="startCardBurst()"
+>
+
+    <div
+        class="gift-box"
+        id="gift-icon"
+    >
+        🤍
+    </div>
+
+    <div
+        class="tap-text"
+        id="tap-text"
+    ></div>
+
+</div>
+
+
+<!-- =========================================================
+     CUTE BURST CONTAINER
+     ========================================================= -->
+
+<div id="cute-burst"></div>
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<div id="main-content">
+
+
+    <!-- =====================================================
+         SCENARIO 1
+         ===================================================== -->
+
+    <section class="hero-section">
+
+        <p class="subtitle">
+            a little place for you🤍
+        </p>
+
+        <h1 class="title-main serif">
+            I made something small for you.
+            Nothing you need to answer.
+            Just a little place filled with words I hope can comfort you.
         
-        <div class="music-widget">
-            <div class="music-top">
-                <img id="player-cover" src="assets/cover/cover1.jpg" alt="Album Art">
-                <div class="music-info">
-                    <span class="title" id="player-title">Hanya Untuk-Mu</span>
-                    <span class="artist" id="player-artist">Ten2Five</span>
-                </div>
-            </div>
+        </h1>
 
-            <div class="progress-wrapper">
-    <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1">
-    <div class="time-display">
-        <span id="current-time">0:00</span>
-        <span id="duration">0:00</span>
-    </div>
-</div>
+        <h1 class="title-main serif">
+            Sasta
+        </h1>
 
-            <div class="controls">
-                <span onclick="prevSong()">⏮</span>
-                <span id="play-pause-btn" onclick="toggleMusic()">⏸</span>
-                <span onclick="nextSong()">⏭</span>
-            </div>
+        <img
+            src="assets/foto/fotoawal.jpg"
+            alt="Keeper of My Heart"
+            style="
+                width: 160px;
+                height: 160px;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 0 25px rgba(229,115,115,0.4);
+                margin-bottom: 25px;
+            "
+        >
+
+        <p
+            class="text-body"
+            style="margin-top:10px;"
+        >
+            Every flower petal holds a whisper of how much you mean to me.
+        </p>
+
+        <div
+            style="
+                font-size: 24px;
+                margin-top:20px;
+            "
+        >
+            🌸
         </div>
 
-        <section class="hero-section">
-            <p class="subtitle">sebuah ucapan cinta untuk pujaan hatiku🤍</p>
-            <h1 class="title-main serif">Untukmu<br>Pemegang Hatiku</h1>
-            <h1 class="title-main serif">Sasta</h1>
-            <img src="assets/foto/fotoawal.jpg" alt="Pemegang Hatiku" style="width: 160px; height: 160px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 0 25px rgba(229,115,115,0.4); margin-bottom: 25px;">
-            <p class="text-body" style="margin-top:10px;">Setiap kelopak bunga menyimpan bisikan tentang betapa berartinya dirimu bagiku.</p>
-            <div style="font-size: 24px; margin-top:20px;">🌸</div>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
+        <button
+            class="next-btn"
+            onclick="nextSection(this)"
+        >
+            🤍
+        </button>
 
-        <section>
-            <p class="subtitle">our melodies</p>
-            <h2 class="title-sub serif">Lagu Yang Mengingatkanku Pada Dirimu</h2>
-            <p class="subtitle">klik cover art untuk ganti lagu</p>
-            <div class="playlist-grid">
+    </section>
 
-                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu1.mp3', 'Hanya Untuk-Mu', 'Ten2Five', 'assets/cover/cover1.jpg')">
-                    <img src="assets/cover/cover1.jpg" alt="Cover Hanya Untuk-Mu" style="filter: none;">
-                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Hanya Untuk-Mu</p>
-                    <p style="font-size: 11px; color: var(--text-muted);">Ten2Five</p>
-                </div>
 
-                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu2.mp3', 'Aku Milikmu', 'Dewa19', 'assets/cover/cover2.jpg')">
-                    <img src="assets/cover/cover2.jpg" alt="Cover Aku Milikmu" style="filter: none;">
-                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Aku Milikmu</p>
-                    <p style="font-size: 11px; color: var(--text-muted);">Dewa19</p>
-                </div>
+    <!-- =====================================================
+         SCENARIO 2 - SONGS
+         ===================================================== -->
 
-                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu3.mp3', 'Kangen', 'Dewa19', 'assets/cover/cover3.jpg')">
-                    <img src="assets/cover/cover3.jpg" alt="Cover Kangen" style="filter: none;">
-                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Kangen</p>
-                    <p style="font-size: 11px; color: var(--text-muted);">Dewa19</p>
-                </div>
-                
-                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu4.mp3', 'Keabadian', 'Reza Artamevia', 'assets/cover/cover4.jpg')">
-                    <img src="assets/cover/cover4.jpg" alt="Cover Keabadian" style="filter: none;">
-                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Keabadian</p>
-                    <p style="font-size: 11px; color: var(--text-muted);">Reza Artamevia</p>
-                </div>
+    <section>
 
-                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu5.mp3', 'Sempurna', 'Andra & The Backbone', 'assets/cover/cover5.jpg')">
-                    <img src="assets/cover/cover5.jpg" alt="Cover Sempurna" style="filter: none;">
-                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Sempurna</p>
-                    <p style="font-size: 11px; color: var(--text-muted);">Andra & The Backbone</p>
-                </div>
+        <p class="subtitle">
+            our melodies
+        </p>
+
+        <h2 class="title-sub serif">
+            Songs That Remind Me of You
+        </h2>
+
+        <p class="subtitle">
+            click the album art to change songs
+        </p>
+
+
+        <div class="playlist-grid">
+
+
+            <div
+                class="photo-item"
+                style="cursor: pointer;"
+                onclick="changeSong(
+                    'assets/lagu/lagu1.mp3',
+                    'You Got It All',
+                    'MYMP',
+                    'assets/cover/cover1.jpg'
+                )"
+            >
+
+                <img
+                    src="assets/cover/cover1.jpg"
+                    alt="Cover You Got It All"
+                    style="filter: none;"
+                >
+
+                <p
+                    class="photo-caption"
+                    style="
+                        font-size: 16px;
+                        margin-top: 10px;
+                        color: #fff;
+                        font-family: 'Montserrat', sans-serif;
+                    "
+                >
+                     You Got It All 
+                </p>
+
+                <p
+                    style="
+                        font-size: 11px;
+                        color: var(--text-muted);
+                    "
+                >
+                    MYMP
+                </p>
 
             </div>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
 
-        <section>
-            <p class="subtitle">🌸 from my heart 🌸</p>
-            <h2 class="title-sub serif">You are my<br>wildest dream<br>come true.</h2>
-            <p class="text-body">
-                In a world full of ordinary moments, you are the extraordinary one. The way you laugh, the way you care, the way you simply exist — it fills every corner of my world with something I never knew I needed.<br><br>
-                These flowers are not enough. No words ever could be. But they carry every unspoken feeling I hold for you, pressed between their petals like tiny love letters waiting to be found.<br><br> Semua Yang Kumau Hanyalah Dirimu.
-            </p>
-            <p class="serif" style="margin-top: 40px; font-style: italic; font-size: 24px; color: var(--text-muted);">
-                - Selalu Dirimu -
-            </p>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
 
-        <section>
-            <p class="subtitle">masih banyak yang tak bisa ku ungkapkan namun ini beberapa alasan</p>
-            <h2 class="title-sub serif">Mengapa Aku Mencintaimu</h2>
-            <div class="reasons-grid">
-                <div class="card"><div class="card-icon">✨</div><h3 class="serif">Your Smile</h3><p>It lights up every room and every corner of my heart simultaneously.</p></div>
-                <div class="card"><div class="card-icon">🌟</div><h3 class="serif">Your Soul</h3><p>Rare, genuine, and more beautiful than any flower ever grown.</p></div>
-                <div class="card"><div class="card-icon">💖</div><h3 class="serif">Your Kindness</h3><p>The way you love the world makes me want to be better every single day.</p></div>
-                <div class="card"><div class="card-icon">🎵</div><h3 class="serif">Your Laughter</h3><p>The best sound in existence. My favourite melody, always.</p></div>
-                <div class="card"><div class="card-icon">💪</div><h3 class="serif">Your Strength</h3><p>You carry so much grace through everything. I admire you endlessly.</p></div>
-                <div class="card"><div class="card-icon">🌸</div><h3 class="serif">Simply You</h3><p>Every version of you, every moment - you are more than enough.</p></div>
+            <div
+                class="photo-item"
+                style="cursor: pointer;"
+                onclick="changeSong(
+                    'assets/lagu/lagu2.mp3',
+                    'Pahintulot',
+                    'Shirebound',
+                    'assets/cover/cover2.jpg'
+                )"
+            >
+
+                <img
+                    src="assets/cover/cover2.jpg"
+                    alt="Cover Pahintulot"
+                    style="filter: none;"
+                >
+
+                <p
+                    class="photo-caption"
+                    style="
+                        font-size: 16px;
+                        margin-top: 10px;
+                        color: #fff;
+                        font-family: 'Montserrat', sans-serif;
+                    "
+                >
+                    Pahintulot
+                </p>
+
+                <p
+                    style="
+                        font-size: 11px;
+                        color: var(--text-muted);
+                    "
+                >
+                    Shirebound  
+                </p>
+
             </div>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
 
-        <section>
-            <p class="subtitle">Waktu terhenti di balik lensa, namun rasanya tak pernah pudar oleh masa.</p>
-            <h2 class="title-sub serif">Baby You're<br>Divine</h2>
-            <div class="photo-grid">
-                <div class="photo-item"><img src="assets/foto/foto1.jpg" alt="You"><p class="photo-caption">you</p></div>
-                <div class="photo-item"><img src="assets/foto/foto2.jpg" alt="Are"><p class="photo-caption">are</p></div>
-                <div class="photo-item"><img src="assets/foto/foto3.jpg" alt="So"><p class="photo-caption">so</p></div>
-                <div class="photo-item"><img src="assets/foto/foto4.jpg" alt="Beautiful"><p class="photo-caption">beautiful</p></div>
-                <div class="photo-item"><img src="assets/foto/foto5.jpg" alt="Like"><p class="photo-caption">like</p></div>
-                <div class="photo-item"><img src="assets/foto/foto6.jpg" alt="An"><p class="photo-caption">an</p></div>
-                <div class="photo-item"><img src="assets/foto/foto7.jpg" alt="Angel"><p class="photo-caption">angel</p></div>
-                <div class="photo-item"><img src="assets/foto/foto8.jpg" alt="🤍"><p class="photo-caption">🤍</p></div>
+
+            <div
+                class="photo-item"
+                style="cursor: pointer;"
+                onclick="changeSong(
+                    'assets/lagu/lagu3.mp3',
+                    'Sagip',
+                    'Jan Roberts',
+                    'assets/cover/cover3.jpg'
+                )"
+            >
+
+                <img
+                    src="assets/cover/cover3.jpg"
+                    alt="Cover Sagip"
+                    style="filter: none;"
+                >
+
+                <p
+                    class="photo-caption"
+                    style="
+                        font-size: 16px;
+                        margin-top: 10px;
+                        color: #fff;
+                        font-family: 'Montserrat', sans-serif;
+                    "
+                >
+                    Sagip
+                </p>
+
+                <p
+                    style="
+                        font-size: 11px;
+                        color: var(--text-muted);
+                    "
+                >
+                    Jan Roberts
+                </p>
+
             </div>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
 
-        <section>
-            <p class="subtitle">our memories</p>
-            <h2 class="title-sub serif">Memories That Last Forever</h2>
-            <div class="video-grid" style="margin-top: 30px;">
-                <div class="video-container" style="margin: 0; max-width: 100%;">
-                    <video controls controlsList="nodownload" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover;">
-                        <source src="assets/video/video2.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="video-container" style="margin: 0; max-width: 100%;">
-                    <video controls controlsList="nodownload" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover;">
-                        <source src="assets/video/video3.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="video-container" style="margin: 0; max-width: 100%;">
-                    <video controls controlsList="nodownload" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover;">
-                        <source src="assets/video/video4.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="video-container" style="margin: 0; max-width: 100%;">
-                    <img src="assets/foto/fotospec.jpg" alt="LUCUU BANGETTT😫😫" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block;">
-                </div>
+
+            <div
+                class="photo-item"
+                style="cursor: pointer;"
+                onclick="changeSong(
+                    'assets/lagu/lagu4.mp3',
+                    'Falling For You',
+                    '1975',
+                    'assets/cover/cover4.jpg'
+                )"
+            >
+
+                <img
+                    src="assets/cover/cover4.jpg"
+                    alt="Cover Falling For You"
+                    style="filter: none;"
+                >
+
+                <p
+                    class="photo-caption"
+                    style="
+                        font-size: 16px;
+                        margin-top: 10px;
+                        color: #fff;
+                        font-family: 'Montserrat', sans-serif;
+                    "
+                >
+                    Falling For You
+                </p>
+
+                <p
+                    style="
+                        font-size: 11px;
+                        color: var(--text-muted);
+                    "
+                >
+                    1975
+                </p>
+
             </div>
-            <p class="text-body" style="font-size: 13px; margin-top: 20px;">Every second with you is a treasure.</p>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
 
-        <section>
-            <p class="subtitle">a prayer for you</p>
-            <h2 class="title-sub serif">Doa Terbaikku</h2>
-            <div style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--accent); padding: 30px 40px; margin-top: 20px; max-width: 600px; border-radius: 0 15px 15px 0; box-shadow: 5px 5px 20px rgba(0,0,0,0.2);">
-                <p class="serif" style="font-size: 24px; font-style: italic; line-height: 1.8; color: #fff;">
-                    "Semoga di ulang tahunmu semua cita-citamu dan anganmu dapat tercapai, semua doa yang kamu panjatkan diberi di waktu yang tepat. Semoga kamu selalu dikelilingi oleh orang-orang yang mencintaimu, dan semoga kamu selalu bahagia. Aku berdoa agar setiap langkahmu dipenuhi dengan keberuntungan, dan setiap harimu dipenuhi dengan kebahagiaan."
+
+            <div
+                class="photo-item"
+                style="cursor: pointer;"
+                onclick="changeSong(
+                    'assets/lagu/lagu5.mp3',
+                    'Lego House',
+                    'Ed Sheeran',
+                    'assets/cover/cover5.jpg'
+                )"
+            >
+
+                <img
+                    src="assets/cover/cover5.jpg"
+                    alt="Cover Lego House"
+                    style="filter: none;"
+                >
+
+                <p
+                    class="photo-caption"
+                    style="
+                        font-size: 16px;
+                        margin-top: 10px;
+                        color: #fff;
+                        font-family: 'Montserrat', sans-serif;
+                    "
+                >
+                    Lego House
+                </p>
+
+                <p
+                    style="
+                        font-size: 11px;
+                        color: var(--text-muted);
+                    "
+                >
+                    Ed Sheeran
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="next-btn"
+            onclick="nextSection(this)"
+        >
+            🤍
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         SCENARIO 3
+         ===================================================== -->
+
+    <section>
+
+        <p class="subtitle">
+            🌸 from my heart 🌸
+        </p>
+
+        <h2 class="title-sub serif">
+            You are my<br>
+            wildest dream<br>
+            come true.
+        </h2>
+
+        <p class="text-body">
+
+            In a world full of ordinary moments, you are the extraordinary one.
+            The way you laugh, the way you care, the way you simply exist —
+            it fills every corner of my world with something I never knew I needed.
+
+            <br><br>
+
+            These flowers are not enough. No words ever could be.
+            But they carry every unspoken feeling I hold for you,
+            pressed between their petals like tiny love letters waiting to be found.
+
+            <br><br>
+
+            All I Want Is You.
+
+        </p>
+
+
+        <p
+            class="serif"
+            style="
+                margin-top: 40px;
+                font-style: italic;
+                font-size: 24px;
+                color: var(--text-muted);
+            "
+        >
+            - Always You -
+        </p>
+
+
+        <button
+            class="next-btn"
+            onclick="nextSection(this)"
+        >
+            🤍
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         SCENARIO 4
+         ===================================================== -->
+
+    <section>
+
+        <p class="subtitle">
+            There is so much more I can't express,
+            but here are a few reasons
+        </p>
+
+        <h2 class="title-sub serif">
+            Why I Love You
+        </h2>
+
+
+        <div class="reasons-grid">
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ✨
+                </div>
+
+                <h3 class="serif">
+                    Your Smile
+                </h3>
+
+                <p>
+                    It lights up every room and every corner
+                    of my heart simultaneously.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🌟
+                </div>
+
+                <h3 class="serif">
+                    Your Soul
+                </h3>
+
+                <p>
+                    Rare, genuine, and more beautiful
+                    than any flower ever grown.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    💖
+                </div>
+
+                <h3 class="serif">
+                    Your Kindness
+                </h3>
+
+                <p>
+                    The way you love the world makes me want
+                    to be better every single day.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🎵
+                </div>
+
+                <h3 class="serif">
+                    Your Laughter
+                </h3>
+
+                <p>
+                    The best sound in existence.
+                    My favourite melody, always.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    💪
+                </div>
+
+                <h3 class="serif">
+                    Your Strength
+                </h3>
+
+                <p>
+                    You carry so much grace through everything.
+                    I admire you endlessly.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🌸
+                </div>
+
+                <h3 class="serif">
+                    Simply You
+                </h3>
+
+                <p>
+                    Every version of you, every moment -
+                    you are more than enough.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="next-btn"
+            onclick="nextSection(this)"
+        >
+            🤍
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         SCENARIO 5 - PHOTOS
+         ===================================================== -->
+
+    <section>
+
+       
+        <div class="photo-grid">
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto1.jpg"
+                    alt="You"
+                >
+
+                <p class="photo-caption">
+                    you
                 </p>
             </div>
-            <p class="text-body" style="font-size: 14px; margin-top: 25px;">Amin paling serius untuk semua mimpimu. Selamat bertambah usia, Sayangku.</p>
-            <button class="next-btn" onclick="nextSection(this)">🤍</button>
-        </section>
 
-        <section>
-            <div style="font-size: 28px; letter-spacing: 10px; margin-bottom: 20px;">🌸🌺🌹</div>
-            <p class="subtitle">always & forever</p>
-            <h1 class="title-sub serif">You Are Loved<br>Beyond Words</h1>
-            <p class="text-body" style="font-size: 14px; max-width: 600px;">
-                No matter where life takes us, know that somewhere in the universe, there is a garden blooming with every feeling I have ever held for you. You deserve the world. You deserve all the flowers. You deserve everything.
-            </p>
-            <p class="serif" style="margin-top: 50px; font-style: italic; color: var(--text-muted); font-size:18px;">
-                made with love, just for you 🤍
-            </p>
-        </section>
-        
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto2.jpg"
+                    alt="Are"
+                >
+
+                <p class="photo-caption">
+                    are
+                </p>
+            </div>
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto3.jpg"
+                    alt="So"
+                >
+
+                <p class="photo-caption">
+                    so
+                </p>
+            </div>
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto4.jpg"
+                    alt="Beautiful"
+                >
+
+                <p class="photo-caption">
+                    beautiful
+                </p>
+            </div>
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto5.jpg"
+                    alt="Like"
+                >
+
+                <p class="photo-caption">
+                    like
+                </p>
+            </div>
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto6.jpg"
+                    alt="An"
+                >
+
+                <p class="photo-caption">
+                    an
+                </p>
+            </div>
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto7.jpg"
+                    alt="Angel"
+                >
+
+                <p class="photo-caption">
+                    angel
+                </p>
+            </div>
+
+
+            <div class="photo-item">
+                <img
+                    src="assets/foto/foto8.jpg"
+                    alt="🤍"
+                >
+
+                <p class="photo-caption">
+                    🤍
+                </p>
+            </div>
+
+        </div>
+
+
+        <button
+            class="next-btn"
+            onclick="nextSection(this)"
+        >
+            🤍
+        </button>
+
+    </section>
+
+
+  <!-- =====================================================
+     SCENARIO 6 - MEMORIES
+     ===================================================== -->
+
+<section class="memories-section">
+
+    <p class="subtitle">
+    our memories
+</p>
+
+<h2 class="title-sub serif">
+    Memories That Last Forever
+</h2>
+
+
+<div class="video-grid memories-video-grid">
+
+    <div class="video-container memories-video-container">
+        <video controls controlsList="nodownload">
+            <source
+                src="assets/video/video2.mp4"
+                type="video/mp4"
+            >
+        </video>
     </div>
 
-    <script src="script.js"></script>
+
+    <div class="video-container memories-video-container">
+        <video controls controlsList="nodownload">
+            <source
+                src="assets/video/video3.mp4"
+                type="video/mp4"
+            >
+        </video>
+    </div>
+
+
+    <div class="video-container memories-video-container">
+        <video controls controlsList="nodownload">
+            <source
+                src="assets/video/video4.mp4"
+                type="video/mp4"
+            >
+        </video>
+    </div>
+
+
+    <div class="video-container memories-video-container">
+        <img
+            src="assets/foto/fotospec.jpg"
+            alt="So incredibly cute 😫😫"
+        >
+    </div>
+
+</div>
+
+
+<p
+    class="text-body"
+    style="
+        font-size: 13px;
+        margin-top: 20px;
+    "
+>
+    Every second with you is a treasure.
+</p>
+
+
+<button
+    class="next-btn"
+    onclick="nextSection(this)"
+>
+    🤍
+</button>
+
+</section>
+
+
+
+
+    <!-- =====================================================
+         SCENARIO 7 - PRAYER
+         ===================================================== -->
+
+    <section>
+
+        <p class="subtitle">
+           A Message for You
+        </p>
+
+        <h2 class="title-sub serif">
+            Prettyy Pauuuuu
+        </h2>
+
+
+        <div
+            style="
+                background: rgba(255, 255, 255, 0.03);
+                border-left: 3px solid var(--accent);
+                padding: 30px 40px;
+                margin-top: 20px;
+                max-width: 600px;
+                border-radius: 0 15px 15px 0;
+                box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+            "
+        >
+
+            <p
+                class="serif"
+                style="
+                    font-size: 24px;
+                    font-style: italic;
+                    line-height: 1.8;
+                    color: #fff;
+                "
+            >
+
+             Hi Pau,
+
+Dili jud ko sure kung ma-put into words nako tanan akong gusto isulti, pero gusto lang jud nako itry.
+
+Gihimo nako ni kay kabalo ko nga naa jud mga adlaw nga kapoy ang school, busy ang life, ug usahay murag daghan kaayog things nga kailangan nato hunahunaon.
+
+Nakahinumdom ko sa atong conversation about life—about how okay ra nga hinay-hinay lang ang progress, and that we don't have to figure everything out all at once.
+
+So, I wanted to make this for you too.
+
+Okay ra jud nga hinay-hinay ang progress. Dili kinahanglan nga ma-figure out nato tanan dayon. You're allowed to grow at your own pace.
+
+Dili ko nag-expect og anything from you because of this. Dili pud nako gusto nga ma-feel nimo nga pressured ka.
+
+Gusto lang jud nako nga naa kay gamay nga reminder nga I hope you're okay.
+
+I'm happy nga gihatagan ko og chance nga makaila nimo, and I'm grateful sa mga little conversations, mga katawa, ug sa mga moments nga atong na-share.
+
+And if life ever feels a little heavy, I hope these little words can make it feel even just a tiny bit lighter.
+
+Take your time, Pau.
+
+Hinay-hinay lang.
+
+You don't have to figure everything out all at once. 🤍
+
+            </p>
+
+        </div>
+
+
+        <p
+            class="text-body"   
+            style="
+                font-size: 14px;
+                margin-top: 25px;
+            "
+        >
+            
+           
+        </p>
+
+
+        <button
+            class="next-btn"
+            onclick="nextSection(this)"
+        >
+            🤍
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         FINAL SCENARIO
+         ===================================================== -->
+
+    <section>
+
+        <div
+            style="
+                font-size: 28px;
+                letter-spacing: 10px;
+                margin-bottom: 20px;
+            "
+        >
+            🌸🌺🌹
+        </div>
+
+
+        <p class="subtitle">
+            always & forever
+        </p>
+
+
+        <h1 class="title-sub serif">
+            You Are Loved<br>
+            Beyond Words
+        </h1>
+
+
+        <p
+            class="text-body"
+            style="
+                font-size: 14px;
+                max-width: 600px;
+            "
+        >
+
+            No matter where life takes us,
+            know that somewhere in the universe,
+            there is a garden blooming with every feeling
+            I have ever held for you.
+
+            You deserve the world.
+            You deserve all the flowers.
+            You deserve everything.
+
+        </p>
+
+
+        <p
+            class="serif"
+            style="
+                margin-top: 50px;
+                font-style: italic;
+                color: var(--text-muted);
+                font-size:18px;
+            "
+        >
+            made with love, just for you 🤍
+        </p>
+
+    </section>
+
+
+</div>
+
+
+<!-- =========================================================
+     SMOOTH OPENING CARD BURST JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+    function startCardBurst() {
+
+        const cover =
+            document.getElementById("cover-screen");
+
+        const burst =
+            document.getElementById("cute-burst");
+
+        const mainContent =
+            document.getElementById("main-content");
+
+
+        /* =====================================================
+           PREVENT MULTIPLE CLICKS
+           ===================================================== */
+
+        if (
+            cover.classList.contains("card-clicked")
+        ) {
+            return;
+        }
+
+
+        /* =====================================================
+           MARK CARD AS CLICKED
+           ===================================================== */
+
+        cover.classList.add("card-clicked");
+
+
+        /* =====================================================
+           START FIRST SONG
+           ===================================================== */
+
+        if (typeof changeSong === "function") {
+
+            changeSong(
+                "assets/lagu/lagu1.mp3",
+                "You Got It All",
+                "MYMP",
+                "assets/cover/cover1.jpg"
+            );
+
+        }
+
+
+        /* =====================================================
+           ACTIVATE BURST
+           ===================================================== */
+
+        burst.classList.add("active");
+
+
+        /* =====================================================
+           CUTE OBJECTS
+           ===================================================== */
+
+        const cuteThings = [
+
+            "🐱",
+            "🐈",
+            "🐈‍⬛",
+            "😻",
+
+            "🌸",
+            "🌷",
+            "🌹",
+            "🌺",
+
+            "💕",
+            "💖",
+            "💗",
+            "🤍",
+
+            "🦋",
+
+            "✨",
+            "🌟",
+
+            "🎀"
+
+        ];
+
+
+        /* =====================================================
+           PARTICLE COUNT
+           ===================================================== */
+
+        const particleCount = 75;
+
+
+        /* =====================================================
+           CREATE PARTICLES
+           ===================================================== */
+
+        for (
+            let i = 0;
+            i < particleCount;
+            i++
+        ) {
+
+            const item =
+                document.createElement("span");
+
+
+            item.className =
+                "burst-item";
+
+
+            /* =================================================
+               RANDOM CUTE OBJECT
+               ================================================= */
+
+            item.textContent =
+                cuteThings[
+                    Math.floor(
+                        Math.random() *
+                        cuteThings.length
+                    )
+                ];
+
+
+            /* =================================================
+               RANDOM DIRECTION
+               ================================================= */
+
+            const angle =
+                Math.random() *
+                Math.PI *
+                2;
+
+
+            /* =================================================
+               FIRST DISTANCE
+               ================================================= */
+
+            const distance1 =
+                80 +
+                Math.random() * 120;
+
+
+            /* =================================================
+               FINAL DISTANCE
+               ================================================= */
+
+            const distance2 =
+                Math.max(
+                    window.innerWidth,
+                    window.innerHeight
+                ) *
+                (
+                    0.55 +
+                    Math.random() * 0.35
+                );
+
+
+            /* =================================================
+               CALCULATE FIRST POSITION
+               ================================================= */
+
+            const x1 =
+                Math.cos(angle) *
+                distance1;
+
+
+            const y1 =
+                Math.sin(angle) *
+                distance1;
+
+
+            /* =================================================
+               CALCULATE FINAL POSITION
+               ================================================= */
+
+            const x2 =
+                Math.cos(angle) *
+                distance2;
+
+
+            const y2 =
+                Math.sin(angle) *
+                distance2;
+
+
+            /* =================================================
+               CSS VARIABLES
+               ================================================= */
+
+            item.style.setProperty(
+                "--x1",
+                x1 + "px"
+            );
+
+
+            item.style.setProperty(
+                "--y1",
+                y1 + "px"
+            );
+
+
+            item.style.setProperty(
+                "--x2",
+                x2 + "px"
+            );
+
+
+            item.style.setProperty(
+                "--y2",
+                y2 + "px"
+            );
+
+
+            /* =================================================
+               RANDOM PARTICLE SIZE
+               ================================================= */
+
+            const scale =
+                0.75 +
+                Math.random() * 0.65;
+
+
+            item.style.setProperty(
+                "--scale",
+                scale
+            );
+
+
+            /* =================================================
+               RANDOM ROTATION
+               ================================================= */
+
+            const rotation =
+                -25 +
+                Math.random() * 50;
+
+
+            item.style.setProperty(
+                "--rotation",
+                rotation + "deg"
+            );
+
+
+            /* =================================================
+               RANDOM ANIMATION SPEED
+               ================================================= */
+
+            const duration =
+                0.9 +
+                Math.random() * 0.35;
+
+
+            item.style.setProperty(
+                "--duration",
+                duration + "s"
+            );
+
+
+            /* =================================================
+               RANDOM DELAY
+               ================================================= */
+
+            const delay =
+                Math.random() * 0.18;
+
+
+            item.style.setProperty(
+                "--delay",
+                delay + "s"
+            );
+
+
+            /* =================================================
+               PARTICLE FONT SIZE
+               ================================================= */
+
+            item.style.fontSize =
+                (
+                    28 +
+                    Math.random() * 28
+                ) +
+                "px";
+
+
+            /* =================================================
+               ADD PARTICLE TO SCREEN
+               ================================================= */
+
+            burst.appendChild(item);
+
+        }
+
+
+        /* =====================================================
+           REVEAL FIRST SCENE
+           ===================================================== */
+
+        setTimeout(
+            function() {
+
+                cover.style.display =
+                    "none";
+
+
+                mainContent.style.display =
+                    "block";
+
+
+                mainContent.classList.add(
+                    "first-reveal"
+                );
+
+            },
+            1200
+        );
+
+
+        /* =====================================================
+           CLEAN UP PARTICLES
+           ===================================================== */
+
+        setTimeout(
+            function() {
+
+                burst.innerHTML =
+                    "";
+
+                burst.classList.remove(
+                    "active"
+                );
+
+            },
+            2000
+        );
+
+    }
+
+</script>
+
+
+<!-- =========================================================
+     YOUR JAVASCRIPT
+     ========================================================= -->
+
+<script src="script.js"></script>
+
+
 </body>
 </html>
