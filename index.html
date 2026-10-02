@@ -619,92 +619,7 @@
          FIXED MUSIC PLAYER
          ========================================================= -->
 
-    <div id="music-player">
-
-        <div class="music-player-top">
-
-            <img
-                id="player-cover"
-                src="assets/cover/cover1.jpg"
-                alt="Current song cover"
-            >
-
-            <div class="music-info">
-
-                <p id="player-title">
-                    You Got It All
-                </p>
-
-                <p id="player-artist">
-                    MYMP
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="music-progress">
-
-            <input
-                type="range"
-                id="seek-bar"
-                min="0"
-                max="100"
-                value="0"
-            >
-
-            <div class="music-time">
-
-                <span id="current-time">
-                    0:00
-                </span>
-
-                <span id="duration">
-                    0:00
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="music-controls">
-
-            <button
-                class="music-control-btn"
-                onclick="prevSong()"
-                aria-label="Previous song"
-            >
-                ⏮
-            </button>
-
-            <button
-                class="music-control-btn"
-                id="play-pause-btn"
-                onclick="toggleMusic()"
-                aria-label="Play or pause music"
-            >
-                ▶
-            </button>
-
-            <button
-                class="music-control-btn"
-                onclick="nextSong()"
-                aria-label="Next song"
-            >
-                ⏭
-            </button>
-
-        </div>
-
-
-        <div class="music-label">
-            now playing ♡
-        </div>
-
-    </div>
-
+   
 
     <!-- =========================================================
          SONG MESSAGE
@@ -737,12 +652,19 @@
         onclick="startCardBurst()"
     >
 
-        <div
-            class="gift-box"
-            id="gift-icon"
-        >
-            🤍
+   <div class="mail-opening">
+    <p class="mail-opening-text">YOU GOT A MAIL</p>
+
+    <div class="gift-box mail-icon" id="gift-icon">
+        <div class="cute-envelope">
+            <div class="letter"></div>
+            <div class="flap"></div>
+            <div class="left-fold"></div>
+            <div class="right-fold"></div>
+            <div class="heart-seal">♥</div>
         </div>
+    </div>
+</div>
 
         <div
             class="tap-text"
@@ -1439,43 +1361,41 @@
 
         </section>
 
+<!-- =====================================================
+     SCENARIO 7 - PRAYER
+     ===================================================== -->
 
-        <!-- =====================================================
-             SCENARIO 7 - PRAYER
-             ===================================================== -->
+<section class="letter-section">
 
-        <section>
+    <p class="subtitle">
+        A Message for You
+    </p>
 
-            <p class="subtitle">
-                A Message for You
-            </p>
+    <h2 class="title-sub serif">
+        Prettyy Pauuuuu
+    </h2>
 
-            <h2 class="title-sub serif">
-                Prettyy Pauuuuu
-            </h2>
+    <div
+        style="
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--accent);
+            padding: 30px 40px;
+            margin-top: 20px;
+            max-width: 600px;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+        "
+    >
 
-
-            <div
-                style="
-                    background: rgba(255, 255, 255, 0.03);
-                    border-left: 3px solid var(--accent);
-                    padding: 30px 40px;
-                    margin-top: 20px;
-                    max-width: 600px;
-                    border-radius: 0 15px 15px 0;
-                    box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
-                "
-            >
-
-                <p
-                    class="serif"
-                    style="
-                        font-size: 24px;
-                        font-style: italic;
-                        line-height: 1.8;
-                        color: #fff;
-                    "
-                >
+        <p
+            class="serif"
+            style="
+                font-size: 24px;
+                font-style: italic;
+                line-height: 1.8;
+                color: #fff;
+            "
+        >   
 Hi Pau,
 
 Dili jud ko sure kung ma-put into words nako tanan akong gusto isulti, pero gusto lang jud nako itry.
@@ -1501,20 +1421,18 @@ Take your time, Pau.
 Hinay-hinay lang.
 
 You don't have to figure everything out all at once. 🤍
-                </p>
+        </p>
 
-            </div>
+    </div>
 
+    <button
+        class="next-btn"
+        onclick="nextSection(this)"
+    >
+        🤍
+    </button>
 
-            <button
-                class="next-btn"
-                onclick="nextSection(this)"
-            >
-                🤍
-            </button>
-
-        </section>
-
+</section>
 
         <!-- =====================================================
              FINAL SCENARIO

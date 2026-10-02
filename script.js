@@ -837,151 +837,60 @@ function initializeSections() {
 
 }
 
-
-// ========================================
-// NEXT SCENARIO
-// ========================================
-
 function nextSection(btn) {
+    if (!btn || isChangingSection) return;
 
-    if (
-        !btn ||
-        isChangingSection
-    ) {
-        return;
-    }
+    const currentSection = btn.closest('section');
+    if (!currentSection) return;
 
+    const currentIndex = Array.from(sections).indexOf(currentSection);
+    const nextIndex = currentIndex + 1;
 
-    const currentSection =
-        btn.closest('section');
-
-
-    if (!currentSection) {
-        return;
-    }
-
-
-    const currentIndex =
-        Array.from(sections).indexOf(
-            currentSection
-        );
-
-
-    const nextIndex =
-        currentIndex + 1;
-
-
-    /*
-     * No next scenario.
-     */
-
-    if (
-        nextIndex >= sections.length
-    ) {
-        return;
-    }
-
-
-    /*
-     * Prevent multiple clicks
-     * during the transition.
-     */
+    if (nextIndex >= sections.length) return;
 
     isChangingSection = true;
-
-
-    /*
-     * Close song message
-     * before changing scenario.
-     */
-
     hideSongMessage();
 
+    const nextSec = sections[nextIndex];
 
-    const nextSec =
-        sections[nextIndex];
+    // Start fading current scene out
+    currentSection.classList.remove('fade-in');
+    currentSection.classList.add('fade-out');
 
-
-    /*
-     * Prepare next scenario.
-     */
-
-    nextSec.style.display =
-        'flex';
-
-    nextSec.classList.remove(
-        'active',
-        'fade-in',
-        'fade-out'
-    );
-
-
-    /*
-     * Force browser to recognize
-     * the initial hidden state.
-     */
-
-    void nextSec.offsetWidth;
-
-
-    /*
-     * Fade OUT current scenario.
-     */
-
-    currentSection.classList.remove(
-        'active',
-        'fade-in'
-    );
-
-    currentSection.classList.add(
-        'fade-out'
-    );
-
-
-    /*
-     * Fade IN next scenario.
-     */
-
+    // Wait for fade-out to finish
     setTimeout(() => {
 
-        nextSec.classList.add(
-            'active',
-            'fade-in'
-        );
+        // Hide current scene
+        currentSection.classList.remove('active', 'fade-out');
+        currentSection.style.display = 'none';
 
-    }, 100);
+        // Prepare next scene
+        nextSec.style.display = 'flex';
+        nextSec.classList.remove('active', 'fade-out');
+        nextSec.classList.add('fade-in');
 
+        // Force browser to render the starting position
+        void nextSec.offsetWidth;
 
-    /*
-     * Finish transition.
-     */
+        // Start fade-in
+        nextSec.classList.remove('fade-in');
+        nextSec.classList.add('active');
 
-    setTimeout(() => {
+        nextSec.style.opacity = '1';
+        nextSec.style.transform = 'translateY(0)';
+        nextSec.style.visibility = 'visible';
 
-        currentSection.classList.remove(
-            'fade-out',
-            'active'
-        );
+        // Reset scrolling
+        nextSec.scrollTop = 0;
 
-        currentSection.style.display =
-            'none';
+        currentSectionIndex = nextIndex;
 
+        setTimeout(() => {
+            isChangingSection = false;
+        }, 650);
 
-        nextSec.classList.remove(
-            'fade-in'
-        );
-
-
-        currentSectionIndex =
-            nextIndex;
-
-
-        isChangingSection = false;
-
-    }, 700);
-
+    }, 600);
 }
-
 
 // ========================================
 // INITIALIZE
